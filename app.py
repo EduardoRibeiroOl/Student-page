@@ -32,6 +32,6 @@ def login():
 
 @app.route('/homepage') #Main route 
 def homepage():
-
+    
     return render_template("homepage.html")
 

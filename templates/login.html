@@ -6,12 +6,23 @@
 
 {% block main %}
 
-    <div><!-- formulario de login -->
-        <form action="/" method="post">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="username" type="text">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="password" placeholder="password" type="password"> 
-            <button type="submit">Log in</button>
-        </form>
+    <div class="right"><!-- formulario de login -->
+        <div>
+            <h1>Student Login</h1>
+            <p>qualquer coisa só para teste</p>
+
+            <form action="/" method="post">
+                    <div class="form_element">
+                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+                    </div>
+                    <div class="form_element">
+                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password"> 
+                    </div>
+                    <div class="form_element">
+                        <button type="submit">Log in</button>
+                    </div>
+            </form>
+        </div>
     <div>
 
 {% endblock %}
