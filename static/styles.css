@@ -1,4 +1,133 @@
-*{
-    padding: 0;
+/* Importar fonte do Google */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #AEC6CF;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #DAE9E4; /*#E6F7FF*/
+    padding: 20px;
+}
+
+.left img { 
+    width: 80%;
+}
+
+.right {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right h2 {
+    color: #333;
+}
+
+.right p {
+    font-size: 14px;
+    color: #666;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.input-group i {
+    margin-right: 10px;
+    color: #555;
+}
+
+.input-group input {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.social-login {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.social-login button {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google {
+    background: #DB4437;
+}
+
+.facebook {
+    background: #1877F2;
+}
+
+.google:hover, .facebook:hover {
+    opacity: 0.8;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    margin-top: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
 }

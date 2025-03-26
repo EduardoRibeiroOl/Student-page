@@ -6,23 +6,36 @@
 
 {% block main %}
 
-    <div class="right"><!-- formulario de login -->
-        <div>
-            <h1>Student Login</h1>
-            <p>qualquer coisa só para teste</p>
-
-            <form action="/" method="post">
-                    <div class="form_element">
-                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
-                    </div>
-                    <div class="form_element">
-                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password"> 
-                    </div>
-                    <div class="form_element">
-                        <button type="submit">Log in</button>
-                    </div>
-            </form>
+    <div class="container">
+        <!-- Lado esquerdo - Ilustração -->
+        <div class="left">
+            <img src="/static/loginimage.jpg" alt="Illustration">
         </div>
-    <div>
+        
+        <!-- Lado direito - Formulário de Login -->
+        <div class="right">
+            <h2>Student Login</h2>
+            <p>Hey, enter your details to log in to your account</p>
+            <form>
+                <div class="input-group">
+                    <i class="fa fa-user"></i>
+                    <input type="text" placeholder="Enter your username/email">
+                </div>
+                <div class="input-group">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" placeholder="Enter your password">
+                </div>
+                <a href="#">Having trouble signing in?</a>
+                <button type="submit">Login In</button>
+            </form>
+            <p>Or sign in with</p>
+            <div class="social-login">
+                <button class="google"><i class="fa-brands fa-google"></i> Google</button>
+                <button class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</button>
+            </div>
+            <p>Don't have an account? <a href="#">Sign Up</a></p>
+        </div>
+    </div>
+
 
 {% endblock %}
