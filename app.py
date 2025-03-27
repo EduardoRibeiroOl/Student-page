@@ -33,32 +33,40 @@ def register():
 
         cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (username, password))
         conection.commit()
-        return redirect("/login")  #render the homepage.html template
+
+        return redirect("/login")  
     
     return render_template("register.html") 
  
 
-@app.route("/login",  methods=['GET', 'POST']) #Initial route
+@app.route("/login",  methods=['GET', 'POST']) 
 def login():
 
-    session.clear() #Clear the session
+    session.clear() 
     
     if request.method == 'POST':
         username = request.form["username"]
         password = request.form["password"]
         
-        #cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (username, password))
         search = cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (username, password))
-        conection.commit()
+        user = cursor.fetchone()
 
-        return redirect("/homepage") #redirect to order rote, int his case is the homepage rote
+        if user:
+            session["user_cookie"] = username #the dictionary is the name of the session, and the value is the username
+            return redirect("/homepage") #redirect to order rote, int his case is the homepage rote
+        
+        else:
+            return redirect("/login")
 
     return render_template("login.html")  
 
 
 
-@app.route("/homepage") #Main route 
+@app.route("/homepage") 
 def homepage():
+
+    if "user_cookie" in session:
+        return render_template("homepage.html")
     
-    return render_template("homepage.html")
+    return redirect("/login") 
 

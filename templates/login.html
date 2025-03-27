@@ -16,22 +16,22 @@
         <div class="right">
             <h2>Student Login</h2>
             <p>Hey, enter your details to log in to your account</p>
-            <form>
+            <form  method = "post" action="/login"><!--{{ url_for('login') }}-->
                 <div class="input-group">
                     <i class="fa fa-user"></i>
-                    <input type="text" placeholder="Enter your username/email">
+                    <input type="text" placeholder="Enter your username/email" name="username">
                 </div>
                 <div class="input-group">
                     <i class="fa fa-lock"></i>
-                    <input type="password" placeholder="Enter your password">
+                    <input type="password" placeholder="Enter your password" name="password">
                 </div>
                 <a href="#">Having trouble signing in?</a>
                 <button type="submit">Login In</button>
             </form>
             <p>Or sign in with</p>
             <div class="social-login">
-                <button class="google"><i class="fa-brands fa-google"></i> Google</button>
-                <button class="facebook"><i class="fa-brands fa-facebook"></i> Facebook</button>
+                <button class="google">Google</button>
+                <button class="facebook">Facebook</button>
             </div>
             <p>Don't have an account? <a href="#">Sign Up</a></p>
         </div>
