@@ -31,9 +31,18 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
 
+        if not username or password:
+            return redirect("/login")
+
+        cursor.execute("SELECT * FROM users WHERE name = %s", (username))
+        validate_name = cursor.fetchone()
+
+        if validate_name:
+            return redirect("/register")
+
         cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (username, password))
         conection.commit()
-        return redirect("/login")  #render the homepage.html template
+        return redirect("/login") 
     
     return render_template("register.html") 
  
@@ -44,21 +53,30 @@ def login():
     session.clear() #Clear the session
     
     if request.method == 'POST':
-        username = request.form["username"]
-        password = request.form["password"]
-        
-        #cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (username, password))
-        search = cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (username, password))
-        conection.commit()
 
-        return redirect("/homepage") #redirect to order rote, int his case is the homepage rote
+        if not request.form["username"]:
+            return redirect("/login")
+        if not request.form["password"]:
+            return redirect("/login")
+        
+        cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (request.form["username"], request.form["password"]))
+        user = cursor.fetchone()
+
+        if user:
+            session["user_id"] = user[0]
+            return redirect("/homepage")
+        else:
+            return redirect("/login")
+
 
     return render_template("login.html")  
 
 
 
-@app.route("/homepage") #Main route 
+@app.route("/homepage") 
 def homepage():
+    if "user_id" in session:
+        return render_template("homepage.html") 
     
-    return render_template("homepage.html")
+    return redirect("homepage.html")
 

@@ -51,6 +51,7 @@ body {
 }
 
 .right p {
+    padding-top: 30px;
     font-size: 14px;
     color: #666;
 }

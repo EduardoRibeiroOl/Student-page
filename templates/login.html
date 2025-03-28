@@ -16,14 +16,14 @@
         <div class="right">
             <h2>Student Login</h2>
             <p>Hey, enter your details to log in to your account</p>
-            <form>
+            <form action = "/login" method = "post">
                 <div class="input-group">
                     <i class="fa fa-user"></i>
-                    <input type="text" placeholder="Enter your username/email">
+                    <input type="text" placeholder="Enter your username/email" name = "username">
                 </div>
                 <div class="input-group">
                     <i class="fa fa-lock"></i>
-                    <input type="password" placeholder="Enter your password">
+                    <input type="password" placeholder="Enter your password" name = "password">
                 </div>
                 <a href="#">Having trouble signing in?</a>
                 <button type="submit">Login In</button>
