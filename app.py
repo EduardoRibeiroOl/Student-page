@@ -14,9 +14,19 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
+
 @app.route("/")
 def root():
     return redirect("/login")
+
+
+@app.route("/homepage")
+def homepage():
+    if "user_id" in session:
+        return render_template("homepagelogin.html")
+    
+    return render_template("homepagenologin.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -52,7 +62,7 @@ def login():
             return redirect("/login")
 
         cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (username, password))
-        user = cursor.fetchone()  # Busca um usuário na base de dados
+        user = cursor.fetchone()  
 
         if user:
             session["user_id"] = user[0] 
@@ -62,9 +72,15 @@ def login():
 
     return render_template("login.html")
 
-@app.route("/homepage")
-def homepage():
-    if "user_id" in session:
-        return render_template("homepage.html")
 
-    return redirect("/login")  
+@app.route("/reports")
+def reports():
+    return render_template("reports.html")
+
+@app.route("/notes")
+def notes():
+    return render_template("notes.html")
+
+@app.route("/grid")
+def grid():
+    return render_template("grid.html")
