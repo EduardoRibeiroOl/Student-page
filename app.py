@@ -83,4 +83,5 @@ def notes():
 
 @app.route("/grid")
 def grid():
+    
     return render_template("grid.html")
