@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Reports
+{% endblock %}
+
+{% block main %}
+    <form method="post" action="/reports">
+        <button type="submit" name="commit">Generate Report</button>
+    </form>
+
+{% endblock %}

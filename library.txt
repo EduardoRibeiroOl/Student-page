@@ -1,0 +1,4 @@
+Flask
+mysql
+Session
+reportlab

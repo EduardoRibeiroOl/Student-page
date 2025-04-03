@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from flask_session import Session
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas 
 import mysql.connector 
+import os
 
 app = Flask(__name__)
 
@@ -21,12 +24,13 @@ def root():
     return redirect("/login")
 
 
-@app.route("/homepage")
-def homepage():
+@app.route("/studantpage")
+def studantpage():
     if "user_id" in session:
-        return render_template("homepagelogin.html")
+        return render_template("studantpage.html")
     
-    return render_template("homepagenologin.html")
+    return render_template("homepage.html")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -66,16 +70,33 @@ def login():
 
         if user:
             session["user_id"] = user[0] 
-            return redirect("/homepage")
+            return redirect("/studantpage")
         else:
             return redirect("/login")
 
     return render_template("login.html")
 
 
-@app.route("/reports")
-def reports():
+@app.route("/reports", methods=["GET", "POST"])
+def reports(): 
+    if request.method == "POST":
+        
+        filename = "hello.pdf"
+        def registration(filename, text):
+            doc = canvas.Canvas(filename, pagesize=A4)
+            height, width = A4
+    
+            doc.drawString(100, width - 100, text)
+            doc.save()
+        
+        registration(filename, "user_id")
+
+        return send_file(filename, as_attachment=True)
+
     return render_template("reports.html")
+
+
+
 
 @app.route("/notes")
 def notes():
@@ -85,3 +106,9 @@ def notes():
 def grid():
     
     return render_template("grid.html")
+
+#PDF functions 
+
+
+
+#def bulletin():
