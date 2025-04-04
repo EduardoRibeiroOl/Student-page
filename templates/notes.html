@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Notes
+{% endblock %}
+
+{% block main %}
+
+    <h3>Matricula: {{ matricula }}</h3> 
+    <h3>Curso: {{ curso }}</h3>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>1º</th>
+                <th>2º</th>
+                <th>3º</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for note in notes %}
+            <tr>
+                <td colspan="3">{{ note[0] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

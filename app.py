@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from flask_session import Session
+
+
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas 
+from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+
 import mysql.connector 
 import os
 
@@ -11,6 +15,7 @@ app = Flask(__name__)
 conection = mysql.connector.connect(
     host='localhost', database='localdata', user='root', password='A@a12072007'
 )
+
 cursor = conection.cursor()
 
 app.config["SESSION_PERMANENT"] = False
@@ -80,35 +85,31 @@ def login():
 @app.route("/reports", methods=["GET", "POST"])
 def reports(): 
     if request.method == "POST":
-        
-        filename = "hello.pdf"
-        def registration(filename, text):
-            doc = canvas.Canvas(filename, pagesize=A4)
-            height, width = A4
-    
-            doc.drawString(100, width - 100, text)
-            doc.save()
-        
-        registration(filename, "user_id")
 
-        return send_file(filename, as_attachment=True)
+        if request.form.get("registration") == "bulletin":    
+            filename = "hello.pdf"
+            def registration(filename, text):
+                doc = canvas.Canvas(filename, pagesize=A4)
+                height, width = A4
+        
+                doc.drawString(100, width - 100, text)
+                doc.save()
+            
+            registration(filename, "hello")
+
+            return send_file(filename, as_attachment=True)
 
     return render_template("reports.html")
 
 
-
-
 @app.route("/notes")
 def notes():
-    return render_template("notes.html")
+
+    cursor.execute("SELECT matter_name FROM matters")
+    notes = cursor.fetchall()
+    return render_template("notes.html", notes=notes)
 
 @app.route("/grid")
 def grid():
     
     return render_template("grid.html")
-
-#PDF functions 
-
-
-
-#def bulletin():
