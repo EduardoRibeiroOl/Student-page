@@ -4,7 +4,11 @@ from flask_session import Session
 
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle 
+from reportlab.lib import colors
+
+from datetime import datetime
 
 import mysql.connector 
 import os
@@ -25,12 +29,14 @@ Session(app)
 
 
 @app.route("/")
-def root():
+def route():
+
     return redirect("/login")
 
 
 @app.route("/studantpage")
 def studantpage():
+
     if "user_id" in session:
         return render_template("studantpage.html")
     
@@ -39,6 +45,7 @@ def studantpage():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
     if request.method == 'POST':
         username = request.form["username"]
         password = request.form["password"]
@@ -61,6 +68,7 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
     session.clear() 
 
     if request.method == 'POST':
@@ -84,20 +92,38 @@ def login():
 
 @app.route("/reports", methods=["GET", "POST"])
 def reports(): 
+
     if request.method == "POST":
 
-        if request.form.get("registration") == "bulletin":    
-            filename = "hello.pdf"
-            def registration(filename, text):
-                doc = canvas.Canvas(filename, pagesize=A4)
-                height, width = A4
-        
-                doc.drawString(100, width - 100, text)
-                doc.save()
-            
-            registration(filename, "hello")
+        if request.form.get("bulletin") == "bulletin":
+            filename = "bulletin.pdf"
+
+            def registration(filename):
+                styles = getSampleStyleSheet()
+                doc = SimpleDocTemplate(filename, pagesize=A4)
+
+                elements = []
+                title = Paragraph("Relatório de Teste", styles["Title"])
+                paragraph = Paragraph("Exemplo para ver se tá tudo certo", styles["BodyText"])
+
+                elements.append(title)
+                elements.append(Spacer(1, 20))
+                elements.append(paragraph)
+
+                doc.build(elements)
+
+            registration(filename)
 
             return send_file(filename, as_attachment=True)
+
+        
+        if request.form.get("registration") == "registration":
+            
+            return redirect("/studantpage")
+        
+        if request.form.get("card") == "card":
+
+            return redirect("/studantpage")
 
     return render_template("reports.html")
 

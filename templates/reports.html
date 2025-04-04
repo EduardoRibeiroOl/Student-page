@@ -7,7 +7,15 @@
 
 {% block main %}
     <form method="post" action="/reports">
-        <button type="submit" name="registration" value="bulletin">Generate Report</button>
+        <div>
+            <button type="submit" name="bulletin" value="bulletin">Boletim</button>
+        </div>
+        <div>
+            <button type="submit" name="registration" value="registration">Comprovação de matrícula</button>
+        </div>
+        <div>
+            <button type="submit" name="card" value="card">Ficha cadastral</button>
+        </div>
     </form>
 
 {% endblock %}
