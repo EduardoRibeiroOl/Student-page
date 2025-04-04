@@ -1,15 +1,50 @@
-{% extends "layout.html" %}
+{% extends "layouthome.html" %}
 
 {% block title %}
     Notes
 {% endblock %}
 
 {% block main %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
-    <h3>Matricula: {{ matricula }}</h3> 
-    <h3>Curso: {{ curso }}</h3>
+    th, td {
+        border: 1px solid #ccc;
+        text-align: center;
+        padding: 8px;
+    }
+
+    h2 {
+        margin-top: 30px;
+    }
+</style>
+
+    {% for note in notes %}
+        <h2>{{ note[0] }}</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>1º</th>
+                    <th>2º</th>
+                    <th>3º</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ note[1] }}</td>
+                    <td>{{ note[2] }}</td>
+                    <td>{{ note[3] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
     
-    <table border="1">
+   <!-- <table border="1">
         <thead>
             <tr>
                 <th>1º</th>
@@ -24,6 +59,6 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+    </table>-->
 
 {% endblock %}

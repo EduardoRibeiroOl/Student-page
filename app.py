@@ -8,8 +8,6 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle 
 from reportlab.lib import colors
 
-from datetime import datetime
-
 import mysql.connector 
 import os
 
@@ -131,8 +129,9 @@ def reports():
 @app.route("/notes")
 def notes():
 
-    cursor.execute("SELECT matter_name FROM matters")
+    cursor.execute("SELECT matter_name, trimestre1, trimestre2, trimestre3 FROM matters")
     notes = cursor.fetchall()
+
     return render_template("notes.html", notes=notes)
 
 @app.route("/grid")
