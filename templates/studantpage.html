@@ -1,16 +1,62 @@
-{% extends "layouthome.html" %}
-
-{% block main %}
-
-<header>
-    <a href="#" class="logo">logo</a>
-
-    <nav class="navbar">
-        <a href="/reports">reports</a>
-        <a href="/notes">notes</a>
-        <a href="/grid">grid</a>    
-    </nav>
-     
-</header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="/static/studantnavbar.css">
+    <link rel="stylesheet" href="/static/studantmain.css">
+    <link rel="stylesheet" href="/static/studantfooter.css">
     
-{% endblock %}
+</head>
+<body>
+
+    <!-- Barra de navegação -->
+    <div class="navbar">
+        <div class="logo">CEFET-RJ</div>
+        <div class="nav-links">
+            <a href="/grid">Grid</a>
+            <a href="/notes">Notes</a>
+            <a href="/reports">Reports</a>
+            <a href="#">About</a>
+            <a href="#">Status</a>
+
+        </div>
+        <!--<a href="/login" class="cta-button">Entrar</a>-->
+
+    </div>
+
+    <!-- Corpo principal com blocos -->
+    <div class="main">
+        <h1>Welcome</h1>
+        <p>
+          Where passion meets purpose — explore ideas, build knowledge, and shape the future.
+        </p>
+      </div>
+    
+
+    <!-- Rodapé para imagens -->
+    <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-left">
+            <h3>SeuProjeto<span>.</span></h3>
+            <p>&copy; 2025 Todos os direitos reservados.</p>
+          </div>
+          <div class="footer-center">
+            <a href="#">Sobre</a>
+            <a href="#">Serviços</a>
+            <a href="#">Contato</a>
+            <a href="#">Privacidade</a>
+          </div>
+          <div class="footer-right">
+            <p>Siga-nos:</p>
+            <div class="social-icons">
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+</body>
+</html>

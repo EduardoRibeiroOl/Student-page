@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+    font-family: 'Georgia', serif;
+  }
+
+  .main {
+    background: url('/static/homepage.png') no-repeat center center/cover;
+    /* Para trocar o fundo, você pode usar também: */
+    /* background-color: #f0f0f0; */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #111;
+    padding: 40px;
+  }
+
+  .main h1 {
+    font-size: 4rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #000000;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .main p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin-top: 20px;
+    line-height: 1.6;
+    color: #000000;
+  }
+
+  @media (max-width: 768px) {
+    .main h1 {
+      font-size: 2.5rem;
+    }
+
+    .main p {
+      font-size: 1rem;
+      padding: 0 10px;
+    }
+  }

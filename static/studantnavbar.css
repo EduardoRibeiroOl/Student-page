@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f4;
+  }
+
+.navbar {
+    background-color: #1e1e2f;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  /* Logo */
+  .navbar .logo {
+    font-size: 1.5em;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .navbar .logo::before {
+    content: '🌐';
+    font-size: 1.2em;
+  }
+
+  /* Links */
+  .navbar .nav-links {
+    display: flex;
+    gap: 30px;
+  }
+
+  .navbar .nav-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .navbar .nav-links a::after {
+    content: '';
+    height: 2px;
+    background: #00f7ff;
+    width: 0%;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s;
+  }
+
+  .navbar .nav-links a:hover {
+    color: #00f7ff;
+  }
+
+  .navbar .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  /* Botão */
+  .cta-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #222;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #444;
+  }
+  
+
+  /* Responsivo básico */
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .navbar .nav-links {
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .navbar .cta-button {
+      margin-top: 10px;
+      align-self: center;
+    }
+  }

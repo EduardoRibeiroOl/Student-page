@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendário com Anotações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .day {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .day:hover {
+            background: #e0f7fa;
+        }
+
+        .day-number {
+            font-weight: bold;
+        }
+
+        #noteModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 10;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 5;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Calendário - Abril 2025</h1>
+<div class="calendar" id="calendar"></div>
+
+<!-- Modal para anotação -->
+<div id="overlay"></div>
+<div id="noteModal">
+    <h3>Adicionar Anotação - Dia <span id="selectedDay"></span></h3>
+    <textarea id="noteText"></textarea>
+    <br>
+    <button onclick="saveNote()">Salvar</button>
+    <button onclick="closeModal()">Cancelar</button>
+</div>
+
+<script>
+    const calendar = document.getElementById("calendar");
+    const noteModal = document.getElementById("noteModal");
+    const overlay = document.getElementById("overlay");
+    const selectedDayElem = document.getElementById("selectedDay");
+    const noteText = document.getElementById("noteText");
+
+    const daysInMonth = 30; // Abril
+    let selectedDay = null;
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        const day = document.createElement("div");
+        day.className = "day";
+        day.innerHTML = `<div class="day-number">${i}</div><div class="note" id="note-${i}"></div>`;
+        day.addEventListener("click", () => openModal(i));
+        calendar.appendChild(day);
+
+        // carregar nota salva (se houver)
+        const savedNote = localStorage.getItem(`note-${i}`);
+        if (savedNote) {
+            document.getElementById(`note-${i}`).textContent = savedNote;
+        }
+    }
+
+    function openModal(day) {
+        selectedDay = day;
+        selectedDayElem.textContent = day;
+        const savedNote = localStorage.getItem(`note-${day}`) || "";
+        noteText.value = savedNote;
+        noteModal.style.display = "block";
+        overlay.style.display = "block";
+    }
+
+    function closeModal() {
+        noteModal.style.display = "none";
+        overlay.style.display = "none";
+    }
+
+    function saveNote() {
+        const note = noteText.value;
+        localStorage.setItem(`note-${selectedDay}`, note);
+        document.getElementById(`note-${selectedDay}`).textContent = note;
+        closeModal();
+    }
+</script>
+
+</body>
+</html>

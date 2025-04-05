@@ -1,27 +1,10 @@
-{% extends "layouthome.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
     Notes
 {% endblock %}
 
 {% block main %}
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    th, td {
-        border: 1px solid #ccc;
-        text-align: center;
-        padding: 8px;
-    }
-
-    h2 {
-        margin-top: 30px;
-    }
-</style>
 
     {% for note in notes %}
         <h2>{{ note[0] }}</h2>
@@ -44,21 +27,4 @@
         </table>
     {% endfor %}
     
-   <!-- <table border="1">
-        <thead>
-            <tr>
-                <th>1º</th>
-                <th>2º</th>
-                <th>3º</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for note in notes %}
-            <tr>
-                <td colspan="3">{{ note[0] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>-->
-
 {% endblock %}

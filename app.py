@@ -138,3 +138,4 @@ def notes():
 def grid():
     
     return render_template("grid.html")
+
