@@ -1,17 +1,72 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title> 
+    <link rel="stylesheet" href="/static/homenav.css">
+    <link rel="stylesheet" href="/static/homemain.css">
+    <link rel="stylesheet" href="/static/homefooter.css">
 
+</head>
+<body>
+    
+  <nav>
+    <div class="logo">LUMINA</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/login" class="btn-login">Sign In</a>
+      <div class="menu-icon">&#9776;</div>
+    </div>
+  </nav>
 
-{% block main %}
+  <main>
+    <div class="main-content">
+      <h1>Venture out and challenge yourself</h1>
+      <p>With one of the best schools in the world, your future begins here.</p>
+      <br />
+      <a href="/register" class="btn-login">Register Now</a>
+      
+    </div>
+  </main>
 
-    <div class="container">
-        <div class="menu">
-            <ul>
-                <li><a href="/home">Home</a></li>
-                <li><a href="/news">News</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </div>      
-    </div>    
+  <footer>
+    <div class="footer-section">
+      <h3>LUMINA</h3>
+      <p>Building digital experiences with elegance and efficiency.</p>
+    </div>
 
-{% endblock %}
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <ul>
+        <li>Email: contact@mysite.com</li>
+        <li>Phone: +1 (123) 456-7890</li>
+        <li class="social-icons">
+          <a href="#">🌐</a>
+          <a href="#">📘</a>
+          <a href="#">📸</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; 2025 MySite. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

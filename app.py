@@ -29,7 +29,8 @@ Session(app)
 @app.route("/")
 def route():
 
-    return redirect("/login")
+    return render_template("homepage.html")
+    #return redirect("/login")
 
 
 @app.route("/studantpage")
