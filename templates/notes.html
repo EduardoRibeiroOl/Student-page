@@ -1,30 +1,108 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notas</title>
+  <style>
+    body {
+      background-color: #121214;
+      color: #e5e7eb;
+      font-family: "Segoe UI", sans-serif;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-{% block title %}
-    Notes
-{% endblock %}
+    h1 {
+      color: #60a5fa;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
 
-{% block main %}
+    .note-card {
+      background-color: #1f1f23;
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
 
-    {% for note in notes %}
-        <h2>{{ note[0] }}</h2>
+    .note-card:hover {
+      transform: scale(1.02);
+    }
 
-        <table>
-            <thead>
-                <tr>
-                    <th>1º</th>
-                    <th>2º</th>
-                    <th>3º</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ note[1] }}</td>
-                    <td>{{ note[2] }}</td>
-                    <td>{{ note[3] }}</td>
-                </tr>
-            </tbody>
-        </table>
-    {% endfor %}
-    
-{% endblock %}
+    .note-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #93c5fd;
+      margin-bottom: 0.8rem;
+    }
+
+    .note-grades {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: center; /* Isso centraliza os textos */
+  width: 100%;
+}
+
+.grade-block {
+  flex: 1; /* Faz cada bloco ocupar espaço igual */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+    .note-grades span {
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 0.2rem;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Notes</h1>
+
+  {% for note in notes %}
+    <div class="note-card">
+      <div class="note-title">{{ note[0] }}</div>
+      <div class="note-grades">
+        <div>
+          <span>
+            <span class="label">1º</span>
+            {{ note[1] }}
+          </span>
+        </div>
+        <div>
+          <span>
+            <span class="label">2º</span>
+            {{ note[2] }}
+          </span>
+        </div>
+        <div>
+          <span>
+            <span class="label">3º</span>
+            {{ note[3] }}
+          </span>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+</body>
+</html>

@@ -8,6 +8,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle 
 from reportlab.lib import colors
 
+import datetime
 import mysql.connector 
 import os
 
@@ -25,12 +26,27 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-
 @app.route("/")
 def route():
-
     return render_template("homepage.html")
-    #return redirect("/login")
+    
+
+@app.route("/home")
+def homepage():
+    return render_template("home.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/services")
+def services():
+    return render_template("services.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
 
 
 @app.route("/studantpage")
@@ -93,28 +109,6 @@ def login():
 def reports(): 
 
     if request.method == "POST":
-
-        if request.form.get("bulletin") == "bulletin":
-            filename = "bulletin.pdf"
-
-            def registration(filename):
-                styles = getSampleStyleSheet()
-                doc = SimpleDocTemplate(filename, pagesize=A4)
-
-                elements = []
-                title = Paragraph("Relatório de Teste", styles["Title"])
-                paragraph = Paragraph("Exemplo para ver se tá tudo certo", styles["BodyText"])
-
-                elements.append(title)
-                elements.append(Spacer(1, 20))
-                elements.append(paragraph)
-
-                doc.build(elements)
-
-            registration(filename)
-
-            return send_file(filename, as_attachment=True)
-
         
         if request.form.get("registration") == "registration":
             
@@ -131,7 +125,7 @@ def reports():
 def notes():
 
     cursor.execute("SELECT matter_name, trimestre1, trimestre2, trimestre3 FROM matters")
-    notes = cursor.fetchall()
+    notes = cursor.fetchall()   
 
     return render_template("notes.html", notes=notes)
 

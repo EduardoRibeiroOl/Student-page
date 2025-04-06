@@ -1,140 +1,189 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Calendário com Anotações</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f0f0f0;
-        }
+  <meta charset="UTF-8">
+  <title>Grade Horária</title>
+  <style>
+    body {
+      background-color: #1c1c1e;
+      color: #e5e7eb;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
 
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
+    h1 {
+      color: #60a5fa;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
 
-        .day {
-            background: white;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            cursor: pointer;
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    .schedule-table {
+      margin-bottom: 3rem;
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #111113;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
 
-        .day:hover {
-            background: #e0f7fa;
-        }
+    h1 + .schedule-table {
+  margin-top: 2rem;
+}
 
-        .day-number {
-            font-weight: bold;
-        }
+    .schedule-table th, .schedule-table td {
+      border: 1px solid #2a2a2e;
+      padding: 1rem;
+      text-align: center;
+    }
 
-        #noteModal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-            display: none;
-            z-index: 10;
-        }
+    .schedule-table th {
+      background-color: #18181b;
+      color: #93c5fd;
+      font-weight: 600;
+    }
 
-        #overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            z-index: 5;
-        }
+    .schedule-table td {
+      background-color: #1f1f21;
+      color: #f1f5f9;
+    }
 
-        textarea {
-            width: 100%;
-            height: 80px;
-            margin-top: 10px;
-        }
+    .schedule-table tr:hover td {
+      background-color: #2a2a2e;
+    }
 
-        button {
-            margin-top: 10px;
-        }
-    </style>
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Morning Class Schedule</h1>
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Horário</th>
+          <th>Segunda</th>
+          <th>Terça</th>
+          <th>Quarta</th>
+          <th>Quinta</th>
+          <th>Sexta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>07:30 - 08:20</td>
+          <td>Matemática</td>
+          <td>Português</td>
+          <td>História</td>
+          <td>Inglês</td>
+          <td>Geografia</td>
+        </tr>
+        <tr>
+          <td>08:20 - 09:10</td>
+          <td>Matemática</td>
+          <td>Português</td>
+          <td>História</td>
+          <td>Inglês</td>
+          <td>Geografia</td>
+        </tr>
+        <tr>
+          <td>09:10 - 10:00</td>
+          <td>Física</td>
+          <td>Química</td>
+          <td>Biologia</td>
+          <td>Artes</td>
+          <td>Redação</td>
+        </tr>
+        <tr>
+          <td>10:15 - 11:05</td>
+          <td>Física</td>
+          <td>Química</td>
+          <td>Biologia</td>
+          <td>Artes</td>
+          <td>Redação</td>
+        </tr>
+        <tr>
+          <td>11:05 - 11:55</td>
+          <td>Ed. Física</td>
+          <td>Matemática</td>
+          <td>Sociologia</td>
+          <td>Filosofia</td>
+          <td>Projeto</td>
+        </tr>
+      </tbody>
+    </table>
 
-<h1>Calendário - Abril 2025</h1>
-<div class="calendar" id="calendar"></div>
+    <h1>Afternoon Class Schedule</h1>
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>13:00 - 13:50</td>
+          <td>Biology</td>
+          <td>Science Lab</td>
+          <td>Computer Science</td>
+          <td>Math Workshop</td>
+          <td>Art</td>
+        </tr>
+        <tr>
+          <td>13:50 - 14:40</td>
+          <td>Biology</td>
+          <td>Science Lab</td>
+          <td>Computer Science</td>
+          <td>Math Workshop</td>
+          <td>Art</td>
+        </tr>
+        <tr>
+          <td>14:40 - 15:30</td>
+          <td>Literature</td>
+          <td>English</td>
+          <td>History</td>
+          <td>Geography</td>
+          <td>Philosophy</td>
+        </tr>
+        <tr>
+          <td>15:45 - 16:35</td>
+          <td>Literature</td>
+          <td>English</td>
+          <td>History</td>
+          <td>Geography</td>
+          <td>Philosophy</td>
+        </tr>
+        <tr>
+          <td>16:35 - 17:25</td>
+          <td>Project</td>
+          <td>Workshop</td>
+          <td>Debate</td>
+          <td>Physical Ed.</td>
+          <td>Free Study</td>
+        </tr>
+      </tbody>
+    </table>
 
-<!-- Modal para anotação -->
-<div id="overlay"></div>
-<div id="noteModal">
-    <h3>Adicionar Anotação - Dia <span id="selectedDay"></span></h3>
-    <textarea id="noteText"></textarea>
-    <br>
-    <button onclick="saveNote()">Salvar</button>
-    <button onclick="closeModal()">Cancelar</button>
-</div>
 
-<script>
-    const calendar = document.getElementById("calendar");
-    const noteModal = document.getElementById("noteModal");
-    const overlay = document.getElementById("overlay");
-    const selectedDayElem = document.getElementById("selectedDay");
-    const noteText = document.getElementById("noteText");
+    <a href="/" class="back-link">
 
-    const daysInMonth = 30; // Abril
-    let selectedDay = null;
-
-    for (let i = 1; i <= daysInMonth; i++) {
-        const day = document.createElement("div");
-        day.className = "day";
-        day.innerHTML = `<div class="day-number">${i}</div><div class="note" id="note-${i}"></div>`;
-        day.addEventListener("click", () => openModal(i));
-        calendar.appendChild(day);
-
-        // carregar nota salva (se houver)
-        const savedNote = localStorage.getItem(`note-${i}`);
-        if (savedNote) {
-            document.getElementById(`note-${i}`).textContent = savedNote;
-        }
-    }
-
-    function openModal(day) {
-        selectedDay = day;
-        selectedDayElem.textContent = day;
-        const savedNote = localStorage.getItem(`note-${day}`) || "";
-        noteText.value = savedNote;
-        noteModal.style.display = "block";
-        overlay.style.display = "block";
-    }
-
-    function closeModal() {
-        noteModal.style.display = "none";
-        overlay.style.display = "none";
-    }
-
-    function saveNote() {
-        const note = noteText.value;
-        localStorage.setItem(`note-${selectedDay}`, note);
-        document.getElementById(`note-${selectedDay}`).textContent = note;
-        closeModal();
-    }
-</script>
-
-</body>
-</html>
