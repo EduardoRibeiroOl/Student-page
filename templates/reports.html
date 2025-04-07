@@ -1,21 +1,80 @@
 {% extends "layout.html" %}
 
-
 {% block title %}
     Reports
 {% endblock %}
 
 {% block main %}
+    <style>
+        .report-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .report-card {
+            background: #1e1e2f;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 280px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .report-card h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .report-card button {
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .report-card button:hover {
+            background: #3182ce;
+        }
+
+        .report-icon {
+            font-size: 3rem;
+            color: #4fd1c5;
+            margin-bottom: 1rem;
+        }
+    </style>
+
     <form method="post" action="/reports">
-        <div>
-            <button type="submit" name="bulletin" value="bulletin">Boletim</button>
-        </div>
-        <div>
-            <button type="submit" name="registration" value="registration">Comprovação de matrícula</button>
-        </div>
-        <div>
-            <button type="submit" name="card" value="card">Ficha cadastral</button>
+        <div class="report-container">
+            <div class="report-card">
+                <div class="report-icon">📄</div>
+                <h3>School Report</h3>
+                <button type="submit" name="bulletin" value="bulletin">Generate Report</button>
+            </div>
+
+            <div class="report-card">
+                <div class="report-icon">🎓</div>
+                <h3>Enrollment Certificate</h3>
+                <button type="submit" name="registration" value="registration">Generate Document</button>
+            </div>
+
+            <div class="report-card">
+                <div class="report-icon">🗂️</div>
+                <h3>Student Registration</h3>
+                <button type="submit" name="card" value="card">Generate Form</button>
+            </div>
         </div>
     </form>
-
 {% endblock %}
+

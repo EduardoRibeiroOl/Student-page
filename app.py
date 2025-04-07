@@ -7,6 +7,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle 
 from reportlab.lib import colors
+import io
 
 import datetime
 import mysql.connector 
@@ -28,7 +29,8 @@ Session(app)
 
 @app.route("/")
 def route():
-    return render_template("homepage.html")
+    return redirect("/reports") 
+   # return render_template("homepage.html")
     
 
 @app.route("/home")
@@ -112,11 +114,29 @@ def reports():
         
         if request.form.get("registration") == "registration":
             
-            return redirect("/studantpage")
+            folder = "pdf" 
+            caminho_pdf = os.path.join(folder, "relatorio.pdf")
+
+           
+            doc = canvas.Canvas(caminho_pdf)
+            doc.drawCentredString(250, 750, "Relatório de Estudos")
+            doc.setFont("Helvetica-Bold", 14)
+            doc.drawString(100, 700, "Este PDF foi gerado e salvo diretamente no servidor.")
+            doc.save()
+
+            return send_file(
+                caminho_pdf,
+                as_attachment=True,
+                download_name="relatorio.pdf", 
+                mimetype="application/pdf"
+            )
+
+        return redirect("/reports")
         
         if request.form.get("card") == "card":
 
             return redirect("/studantpage")
+
 
     return render_template("reports.html")
 
