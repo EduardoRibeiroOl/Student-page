@@ -29,8 +29,8 @@ Session(app)
 
 @app.route("/")
 def route():
-    return redirect("/reports") 
-   # return render_template("homepage.html")
+    #return redirect("/reports") 
+    return render_template("homepage.html")
     
 
 @app.route("/home")
@@ -111,17 +111,44 @@ def login():
 def reports(): 
 
     if request.method == "POST":
+
+        cursor.execute("SELECT id, name, password FROM users WHERE id = %s", (session["user_id"],))
+        info = cursor.fetchone() 
+
+        user_info = [
+            [ "Id", "name","Course"],
+            [ info[0], info[1], info[2]]
+            ]                              
+            
+            
         
         if request.form.get("registration") == "registration":
             
             folder = "pdf" 
             caminho_pdf = os.path.join(folder, "relatorio.pdf")
+            doc = canvas.Canvas(caminho_pdf, pagesize=A4)
+            width, height = A4
 
-           
-            doc = canvas.Canvas(caminho_pdf)
-            doc.drawCentredString(250, 750, "Relatório de Estudos")
-            doc.setFont("Helvetica-Bold", 14)
-            doc.drawString(100, 700, "Este PDF foi gerado e salvo diretamente no servidor.")
+
+            doc.setFont("Helvetica-Bold", 16)
+            doc.setFillColorRGB(0.0, 0.0, 0.0) 
+            doc.drawCentredString(width / 2, height - 60, "Student report card")
+            
+            doc.setFont("Helvetica", 14)
+            doc.drawCentredString(width / 2, height - 80, "Lumina Institute")
+
+            tabela = Table(user_info, colWidths=[150, 100, 150])
+            tabela.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                ("GRID", (0, 0), (-1, -1), 1, colors.black),
+                ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ]))
+
+            # Posiciona a tabela no canvas
+            tabela.wrapOn(doc, width, height)
+            tabela.drawOn(doc, 100, height - 150)  # posição X, Y
+
             doc.save()
 
             return send_file(
