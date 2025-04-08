@@ -64,21 +64,24 @@ def studantpage():
 def register():
 
     if request.method == 'POST':
+        fullname = request.form["fullname"]
+        email = request.form["email"]
         username = request.form["username"]
         password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
 
-        if not username or not password:
+        if not username or not password or not fullname or not email or not confirm_password:
+            return redirect("/register")
+         
+        cursor.execute("SELECT * FROM users WHERE name = %s, email = %s"(username, email,))
+        validate = cursor.fetchone()
+
+        if validate:
             return redirect("/register")
 
-       
-        cursor.execute("SELECT * FROM users WHERE name = %s", (username,))
-        validate_name = cursor.fetchone()
-
-        if validate_name:
-            return redirect("/register")
-
-        cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (username, password))
+        cursor.execute("INSERT INTO users (name, password, email) VALUES (%s, %s, %s)", (username, password, email))
         conection.commit()
+
         return redirect("/login")
 
     return render_template("register.html")
@@ -117,11 +120,22 @@ def reports():
 
         user_info = [
             [ "Id", "name","Course"],
-            [ info[0], info[1], info[2]]
+            [ info[0], info[1], info[2]]    
             ]                              
-            
-            
         
+        cursor.execute("SELECT matter_name, trimestre1, trimestre2, trimestre3, ROUND((trimestre1 + trimestre2 + trimestre3) / 3, 2) AS MED FROM matters")
+
+        user_notes = cursor.fetchall()
+
+        notes = [
+            ["matter", "1","2", "3", "MED"]
+            ]
+        
+        for note in user_notes:
+            notes.append(list(note))
+
+
+
         if request.form.get("registration") == "registration":
             
             folder = "pdf" 
@@ -145,9 +159,21 @@ def reports():
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ]))
 
-            # Posiciona a tabela no canvas
+            second_table = Table(notes, colWidths=[100, 100, 100, 100])
+            second_table.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                ("GRID", (0, 0), (-1, -1), 1, colors.black),
+                ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ]))
+
+
+            # Table
             tabela.wrapOn(doc, width, height)
-            tabela.drawOn(doc, 100, height - 150)  # posição X, Y
+            tabela.drawOn(doc, 100, height - 150) 
+            # Second table
+            second_table.wrapOn(doc, width, height)
+            second_table.drawOn(doc, 50, height - 600)
 
             doc.save()
 
@@ -157,8 +183,6 @@ def reports():
                 download_name="relatorio.pdf", 
                 mimetype="application/pdf"
             )
-
-        return redirect("/reports")
         
         if request.form.get("card") == "card":
 
@@ -166,15 +190,6 @@ def reports():
 
 
     return render_template("reports.html")
-
-
-@app.route("/notes")
-def notes():
-
-    cursor.execute("SELECT matter_name, trimestre1, trimestre2, trimestre3 FROM matters")
-    notes = cursor.fetchall()   
-
-    return render_template("notes.html", notes=notes)
 
 @app.route("/grid")
 def grid():
