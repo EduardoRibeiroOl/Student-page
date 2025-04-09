@@ -73,13 +73,16 @@ def register():
         if not username or not password or not fullname or not email or not confirm_password:
             return redirect("/register")
          
-        cursor.execute("SELECT * FROM users WHERE name = %s, email = %s"(username, email,))
+        cursor.execute("SELECT * FROM users WHERE username = %s AND email = %s", (username, email))
         validate = cursor.fetchone()
 
         if validate:
             return redirect("/register")
+        
+        if password != confirm_password:
+            return redirect("/register")
 
-        cursor.execute("INSERT INTO users (name, password, email) VALUES (%s, %s, %s)", (username, password, email))
+        cursor.execute("INSERT INTO users (name, password, email, username) VALUES (%s, %s, %s, %s)", (fullname, password, email, username))
         conection.commit()
 
         return redirect("/login")
@@ -98,7 +101,7 @@ def login():
         if not username or not password:
             return redirect("/login")
 
-        cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (username, password))
+        cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
         user = cursor.fetchone()  
 
         if user:
