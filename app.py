@@ -29,7 +29,7 @@ Session(app)
 
 @app.route("/")
 def route():
-    #return redirect("/reports") 
+     
     return render_template("homepage.html")
     
 
@@ -84,6 +84,10 @@ def register():
 
         cursor.execute("INSERT INTO users (name, password, email, username) VALUES (%s, %s, %s, %s)", (fullname, password, email, username))
         conection.commit()
+        cursor.execute("SELECT id FROM users WHERE username = %s AND email = %s", (username, email))
+        student_id = cursor.fetchone()
+        cursor.execute("INSERT INTO grades (student_id) VALUES (%s)", (student_id))
+        conection.commit()
 
         return redirect("/login")
 
@@ -118,6 +122,7 @@ def reports():
 
     if request.method == "POST":
 
+        
         cursor.execute("SELECT id, name, password FROM users WHERE id = %s", (session["user_id"],))
         info = cursor.fetchone() 
 
@@ -126,7 +131,8 @@ def reports():
             [ info[0], info[1], info[2]]    
             ]                              
         
-        cursor.execute("SELECT matter_name, trimestre1, trimestre2, trimestre3, ROUND((trimestre1 + trimestre2 + trimestre3) / 3, 2) AS MED FROM matters")
+        
+        cursor.execute("SELECT * FROM grades WHERE student_id = %s", (session["user_id"],))
 
         user_notes = cursor.fetchall()
 
