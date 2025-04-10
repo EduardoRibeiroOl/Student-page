@@ -59,6 +59,9 @@ def studantpage():
     
     return render_template("homepage.html")
 
+@app.route("/teacherpage", methods=["GET", "POST"])
+def teacherpage():
+    return render_template("teacherpage.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -109,8 +112,14 @@ def login():
         user = cursor.fetchone()  
 
         if user:
-            session["user_id"] = user[0] 
-            return redirect("/studantpage")
+            session["user_id"] = user[0]
+            cursor.execute("SELECT level FROM users WHERE id = %s", (user[0],))
+            level_result = cursor.fetchone()
+            
+            if level_result and level_result[0] == "teacher":
+                return redirect("/teacherpage")
+            else:
+                return redirect("/studantpage")
         else:
             return redirect("/login")
 
@@ -204,4 +213,9 @@ def reports():
 def grid():
     
     return render_template("grid.html")
+
+
+@app.route("/editgrades")
+def editgrades():
+    return render_template("editgrades.html")
 

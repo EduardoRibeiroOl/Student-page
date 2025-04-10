@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="/static/studantnavbar.css">
+    <link rel="stylesheet" href="/static/studantmain.css">
+    <link rel="stylesheet" href="/static/studantfooter.css">
+    <style>
+        .main {
+            text-align: center;
+            padding: 6rem 2rem;
+            color: #e5e7eb;
+        }
+
+        .main h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #93c5fd;
+        }
+
+        .main p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+        }
+
+        .edit-grades-btn {
+            padding: 1rem 2rem;
+            background-color: #3b82f6;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-grades-btn:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">LUMINA</div>
+        <div class="nav-links">
+            <a href="/editgrades">Edit Grades</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <h1>Welcome, Teacher</h1>
+        <p>You have the power to guide and shape the future. Use this dashboard to update your students’ progress.</p>
+        <a href="/editgrades"><button class="edit-grades-btn">Go to Grade Editor</button></a>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <h3>Lumina<span>.</span></h3>
+                <p>&copy; 2025 All rights reserved.</p>
+            </div>
+            <div class="footer-center">
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+            </div>
+            <div class="footer-right">
+                <p>Follow us:</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
