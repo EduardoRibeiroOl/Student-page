@@ -72,6 +72,9 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
+        level = "student"
+        turn = "morning"
+        serie = "firt"
 
         if not username or not password or not fullname or not email or not confirm_password:
             return redirect("/register")
@@ -85,13 +88,11 @@ def register():
         if password != confirm_password:
             return redirect("/register")
 
-        cursor.execute("INSERT INTO users (name, password, email, username) VALUES (%s, %s, %s, %s)", (fullname, password, email, username))
+        cursor.execute("INSERT INTO users (name, password, email, username, level, turn, serie) VALUES (%s, %s, %s, %s, %s, %s, %s)", (fullname, password, email, username, level, turn, serie))
         conection.commit()
-        cursor.execute("SELECT id FROM users WHERE username = %s AND email = %s", (username, email))
-        student_id = cursor.fetchone()
-        cursor.execute("INSERT INTO grades (student_id) VALUES (%s)", (student_id))
-        conection.commit()
-
+        #cursor.execute("SELECT id FROM users WHERE username = %s AND email = %s", (username, email))
+        #student_id = cursor.fetchone()
+        #cursor.execute("INSERT INTO grades (student_id) VALUES (%s)", (student_id))
         return redirect("/login")
 
     return render_template("register.html")
@@ -217,5 +218,21 @@ def grid():
 
 @app.route("/editgrades")
 def editgrades():
-    return render_template("editgrades.html")
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="A@a12072007",
+        database="localdata"
+    )
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT id, name, course, turn FROM users WHERE level = 'student'")
+    students = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM grades")
+    grades = cursor.fetchall()
+
+    db.close()  # sempre bom fechar se for criar toda vez
+
+    return render_template("editgrades.html", students=students, grades=grades)
 

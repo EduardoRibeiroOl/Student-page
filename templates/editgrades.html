@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Notas</title>
+  <link rel="stylesheet" href="/static/estilo.css">
+  <style>
+    body {
+      background-color: #1c1c1e;
+      color: #e5e7eb;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+    }
+    .accordion {
+      background-color: #2a2a2e;
+      color: white;
+      cursor: pointer;
+      padding: 1rem;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 1.2rem;
+      transition: 0.3s;
+      margin-bottom: 0.5rem;
+    }
+    .active, .accordion:hover {
+      background-color: #3a3a3e;
+    }
+    .panel {
+      padding: 0 1rem;
+      display: none;
+      background-color: #111113;
+      overflow: hidden;
+      border-left: 3px solid #60a5fa;
+      margin-bottom: 1rem;
+    }
+    .student {
+      padding: 1rem;
+      border-bottom: 1px solid #333;
+    }
+    .student:hover {
+      background-color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Editar Notas</h1>
+
+  {% set agrupados = {} %}
+  {% for aluno in students %}
+    {% set key = aluno.course ~ " - Turno: " ~ aluno.turn %}
+    {% if key not in agrupados %}
+      {% set _ = agrupados.update({key: []}) %}
+    {% endif %}
+    {% set _ = agrupados[key].append(aluno) %}
+  {% endfor %}
+
+  {% for grupo, alunos in agrupados.items() %}
+    <button class="accordion">{{ grupo }}</button>
+    <div class="panel">
+      {% for aluno in alunos %}
+        <div class="student">
+          <h3>{{ aluno.name }}</h3>
+          <ul>
+            {% for nota in grades if nota.student_id == aluno.id %}
+              <li>{{ nota.subject }} ({{ nota.trimester }}): {{ nota.grade }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <script>
+    const accordions = document.querySelectorAll(".accordion");
+    accordions.forEach(btn => {
+      btn.addEventListener("click", function () {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
+      });
+    });
+  </script>
+</body>
+</html>
