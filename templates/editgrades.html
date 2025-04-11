@@ -42,36 +42,82 @@
     .student:hover {
       background-color: #222;
     }
+    input[type="text"] {
+      background-color: #2a2a2e;
+      color: white;
+      border: 1px solid #444;
+      padding: 4px;
+      border-radius: 4px;
+      width: 80px;
+      margin-bottom: 5px;
+    }
+    select {
+      background-color: #2a2a2e;
+      color: white;
+      border: 1px solid #444;
+      padding: 4px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+    .save-btn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #60a5fa;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .save-btn:hover {
+      background-color: #3b82f6;
+    }
   </style>
 </head>
 <body>
 
   <h1>Editar Notas</h1>
 
-  {% set agrupados = {} %}
-  {% for aluno in students %}
-    {% set key = aluno.course ~ " - Turno: " ~ aluno.turn %}
-    {% if key not in agrupados %}
-      {% set _ = agrupados.update({key: []}) %}
-    {% endif %}
-    {% set _ = agrupados[key].append(aluno) %}
-  {% endfor %}
+  <form method="POST" action="/updategrades">
+    {% set agrupados = {} %}
+    {% for aluno in students %}
+      {% set key = aluno.course ~ " - Turno: " ~ aluno.turn %}
+      {% if key not in agrupados %}
+        {% set _ = agrupados.update({key: []}) %}
+      {% endif %}
+      {% set _ = agrupados[key].append(aluno) %}
+    {% endfor %}
 
-  {% for grupo, alunos in agrupados.items() %}
-    <button class="accordion">{{ grupo }}</button>
-    <div class="panel">
-      {% for aluno in alunos %}
-        <div class="student">
-          <h3>{{ aluno.name }}</h3>
-          <ul>
-            {% for nota in grades if nota.student_id == aluno.id %}
-              <li>{{ nota.subject }} ({{ nota.trimester }}): {{ nota.grade }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
+    {% for grupo, alunos in agrupados.items() %}
+      <button type="button" class="accordion">{{ grupo }}</button>
+      <div class="panel">
+        {% for aluno in alunos %}
+          <div class="student">
+            <h3>{{ aluno.name }}</h3>
+            <ul>
+              {% for nota in grades if nota.student_id == aluno.id %}
+                <li>
+                  {{ nota.subject }} ({{ nota.trimester }}):
+                  <input type="text" name="grade_{{ nota.id }}" value="{{ nota.grade }}">
+                </li>
+              {% endfor %}
+            </ul>
+
+            <h4>Adicionar nova nota:</h4>
+            <input type="hidden" name="new_student_id[]" value="{{ aluno.id }}">
+            <input type="text" name="new_subject_{{ aluno.id }}[]" placeholder="Matéria">
+            <select name="new_trimester_{{ aluno.id }}[]">
+              <option value="1º">1º</option>
+              <option value="2º">2º</option>
+              <option value="3º">3º</option>
+            </select>
+            <input type="text" name="new_grade_{{ aluno.id }}[]" placeholder="Nota">
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <button class="save-btn" type="submit">Salvar Notas</button>
+  </form>
 
   <script>
     const accordions = document.querySelectorAll(".accordion");
@@ -85,3 +131,4 @@
   </script>
 </body>
 </html>
+

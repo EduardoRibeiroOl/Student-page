@@ -236,3 +236,44 @@ def editgrades():
 
     return render_template("editgrades.html", students=students, grades=grades)
 
+@app.route("/updategrades", methods=["POST"])
+def updategrades():
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="A@a12072007",
+        database="localdata"
+    )
+    cursor = db.cursor()
+
+    form = request.form
+
+    # 1. Atualizar notas existentes
+    for key in form:
+        if key.startswith("grade_"):
+            grade_id = key.split("_")[1]
+            nova_nota = form[key]
+
+            cursor.execute("UPDATE grades SET grade = %s WHERE id = %s", (nova_nota, grade_id))
+
+    # 2. Adicionar novas notas
+    for key in form:
+        if key.startswith("new_student_id"):
+            student_ids = form.getlist(key)
+            for student_id in student_ids:
+                subject_list = form.getlist(f"new_subject_{student_id}[]")
+                trimester_list = form.getlist(f"new_trimester_{student_id}[]")
+                grade_list = form.getlist(f"new_grade_{student_id}[]")
+
+                for subject, trimester, grade in zip(subject_list, trimester_list, grade_list):
+                    if subject.strip() and grade.strip():
+                        cursor.execute(
+                            "INSERT INTO grades (student_id, subject, trimester, grade) VALUES (%s, %s, %s, %s)",
+                            (student_id, subject, trimester, grade)
+                        )
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return redirect("/editgrades")
