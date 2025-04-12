@@ -2,19 +2,20 @@ from flask import Flask, render_template, request, redirect, url_for, session, s
 from flask_session import Session
 from flask_mail import Mail, Message
 
-
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle 
+#from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+#from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import Table, TableStyle
 from reportlab.lib import colors
+from reportlab.lib.units import mm
 import io
 
-import datetime
+from datetime import datetime
 import mysql.connector 
 import os
 
-import smtplib
+#import smtplib
 from email.mime.text import MIMEText
 from itsdangerous import URLSafeTimedSerializer
 
@@ -194,45 +195,50 @@ def reports():
 
     if request.method == "POST":
 
-        
-        cursor.execute("SELECT id, name, password FROM users WHERE id = %s", (session["user_id"],))
-        info = cursor.fetchone() 
+        if request.form.get("bulletin") == "bulletin":
+            cursor = conection.cursor()
+            cursor.execute("SELECT id, name, course FROM users WHERE id = %s", (session["user_id"],))
+            info = cursor.fetchone()
 
-        user_info = [
-            [ "Id", "name","Course"],
-            [ info[0], info[1], info[2]]    
-            ]                              
-        
-        
-        cursor.execute("SELECT * FROM grades WHERE student_id = %s", (session["user_id"],))
-
-        user_notes = cursor.fetchall()
-
-        notes = [
-            ["matter", "1","2", "3", "MED"]
+            user_info = [
+                ["Id", "Name", "Course"],
+                [info[0], info[1], info[2]]
             ]
-        
-        for note in user_notes:
-            notes.append(list(note))
 
+            cursor.execute("SELECT subject, trimester, grade FROM grades WHERE student_id = %s", (session["user_id"],))
+            user_notes = cursor.fetchall()
 
+            notas_dict = {}
+            for subject, trimester, grade in user_notes:
+                if subject not in notas_dict:
+                    notas_dict[subject] = {"1st": "-", "2nd": "-", "3rd": "-"}
+                notas_dict[subject][trimester] = grade
 
-        if request.form.get("registration") == "registration":
-            
-            folder = "pdf" 
+            notes = [["Subject", "1st", "2nd", "3rd", "AVG"]]
+            for subject, trimestres in notas_dict.items():
+                notas_validas = [float(n) for n in trimestres.values() if str(n).replace('.', '', 1).isdigit()]
+                media = round(sum(notas_validas) / len(notas_validas), 2) if notas_validas else "-"
+                notes.append([
+                    subject,
+                    trimestres.get("1st", "-"),
+                    trimestres.get("2nd", "-"),
+                    trimestres.get("3rd", "-"),
+                    media
+                ])
+
+            folder = "pdf"
+            os.makedirs(folder, exist_ok=True)
             caminho_pdf = os.path.join(folder, "relatorio.pdf")
+
             doc = canvas.Canvas(caminho_pdf, pagesize=A4)
             width, height = A4
 
-
             doc.setFont("Helvetica-Bold", 16)
-            doc.setFillColorRGB(0.0, 0.0, 0.0) 
-            doc.drawCentredString(width / 2, height - 60, "Student report card")
-            
+            doc.drawCentredString(width / 2, height - 60, "Student Report Card")
             doc.setFont("Helvetica", 14)
             doc.drawCentredString(width / 2, height - 80, "Lumina Institute")
 
-            tabela = Table(user_info, colWidths=[150, 100, 150])
+            tabela = Table(user_info, colWidths=[100, 200, 150])
             tabela.setStyle(TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
                 ("GRID", (0, 0), (-1, -1), 1, colors.black),
@@ -240,7 +246,7 @@ def reports():
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ]))
 
-            second_table = Table(notes, colWidths=[100, 100, 100, 100])
+            second_table = Table(notes, colWidths=[122, 82, 82, 82, 82])
             second_table.setStyle(TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
                 ("GRID", (0, 0), (-1, -1), 1, colors.black),
@@ -248,27 +254,111 @@ def reports():
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ]))
 
-
-            # Table
             tabela.wrapOn(doc, width, height)
-            tabela.drawOn(doc, 100, height - 150) 
-            # Second table
+            tabela.drawOn(doc, 70, height - 160)
             second_table.wrapOn(doc, width, height)
-            second_table.drawOn(doc, 50, height - 300)
+            second_table.drawOn(doc, 70, height - 230)
 
             doc.save()
 
             return send_file(
                 caminho_pdf,
                 as_attachment=True,
-                download_name="relatorio.pdf", 
+                download_name="relatorio.pdf",
                 mimetype="application/pdf"
             )
         
         if request.form.get("card") == "card":
+            cursor = conection.cursor()
+            cursor.execute("SELECT id, name, course FROM users WHERE id = %s", (session["user_id"],))
+            aluno = cursor.fetchone()
 
-            return redirect("/studantpage")
+            if not aluno:
+                return "Aluno não encontrado", 404
 
+            aluno_id, nome, curso = aluno
+
+            folder = "pdf"
+            os.makedirs(folder, exist_ok=True)
+            caminho_pdf = os.path.join(folder, "ID.pdf")
+
+            largura = 85.6 * mm
+            altura = 53.98 * mm
+
+            doc = canvas.Canvas(caminho_pdf, pagesize=(largura, altura))
+
+            doc.setStrokeColorRGB(0, 0, 0)
+            doc.setFillColorRGB(0.9, 0.9, 1)
+            doc.rect(0, 0, largura, altura, fill=1)
+
+            doc.setFont("Helvetica-Bold", 10)
+            doc.setFillColorRGB(0, 0, 0.5)
+            doc.drawCentredString(largura / 2, altura - 10 * mm, "Lumina Institute")
+
+            doc.setFont("Helvetica", 8)
+            doc.setFillColorRGB(0, 0, 0)
+            doc.drawString(10 * mm, altura - 20 * mm, f"Nome: {nome}")
+            doc.drawString(10 * mm, altura - 26 * mm, f"Matrícula: {aluno_id}")
+            doc.drawString(10 * mm, altura - 32 * mm, f"Curso: {curso}")
+
+            doc.line(10 * mm, altura - 45 * mm, largura - 10 * mm, altura - 45 * mm)
+            doc.drawCentredString(largura / 2, altura - 48 * mm, "Assinatura do aluno")
+
+            doc.save()
+
+            return send_file(
+                caminho_pdf,
+                as_attachment=True,
+                download_name="identificacao.pdf",
+                mimetype="application/pdf"
+            )
+        
+        if request.form.get("registration") == "registration":
+            cursor = conection.cursor()
+            cursor.execute("SELECT id, name, course, turn FROM users WHERE id = %s", (session["user_id"],))
+            aluno = cursor.fetchone()
+
+            if not aluno:
+                return "Aluno não encontrado", 404
+
+            aluno_id, nome, curso, turno = aluno
+            data_registro = datetime.now().strftime("%d/%m/%Y")
+
+            folder = "pdf"
+            os.makedirs(folder, exist_ok=True)
+            caminho_pdf = os.path.join(folder, "register.pdf")
+
+            doc = canvas.Canvas(caminho_pdf, pagesize=A4)
+            largura, altura = A4
+
+            doc.setFont("Helvetica-Bold", 16)
+            doc.drawCentredString(largura / 2, altura - 50, "Lumina Institute")
+
+            doc.setFont("Helvetica", 14)
+            doc.drawCentredString(largura / 2, altura - 80, "Documento de Registro Escolar")
+
+            doc.setFont("Helvetica", 12)
+            doc.drawString(50, altura - 130, f"Nome completo: {nome}")
+            doc.drawString(50, altura - 160, f"Matrícula (ID): {aluno_id}")
+            doc.drawString(50, altura - 190, f"Curso: {curso}")
+            doc.drawString(50, altura - 220, f"Turno: {turno}")
+            doc.drawString(50, altura - 250, f"Data de registro: {data_registro}")
+
+            doc.line(50, altura - 320, 250, altura - 320)
+            doc.drawString(50, altura - 335, "Assinatura do responsável")
+
+            doc.setFont("Helvetica-Oblique", 10)
+            doc.drawCentredString(largura / 2, 30, "Este documento foi gerado automaticamente pelo sistema Lumina.")
+
+            doc.save()
+
+            return send_file(
+                caminho_pdf,
+                as_attachment=True,
+                download_name="registro.pdf",
+                mimetype="application/pdf"
+            )
+            
     return render_template("reports.html")
 
 
