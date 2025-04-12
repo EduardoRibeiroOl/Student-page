@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, flash
 from flask_session import Session
+from flask_mail import Mail, Message
 
 
 from reportlab.lib.pagesizes import A4
@@ -13,7 +14,12 @@ import datetime
 import mysql.connector 
 import os
 
+import smtplib
+from email.mime.text import MIMEText
+from itsdangerous import URLSafeTimedSerializer
+
 app = Flask(__name__)
+app.secret_key = 'secret_key'
 
 
 conection = mysql.connector.connect(
@@ -26,42 +32,55 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = '0ff074f593e6ee'
+app.config['MAIL_PASSWORD'] = 'daea5fd00343b9'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEFAULT_SENDER'] = 'noreply@seudominio.com'
+mail = Mail(app)
+s = URLSafeTimedSerializer(app.secret_key)
 
 @app.route("/")
 def route():
-     
+
     return render_template("homepage.html")
-    
 
 @app.route("/home")
 def homepage():
+
     return render_template("home.html")
 
 @app.route("/about")
 def about():
+
     return render_template("about.html")
 
 @app.route("/services")
 def services():
+
     return render_template("services.html")
 
 @app.route("/contact")
 def contact():
-    return render_template("contact.html")
 
+    return render_template("contact.html")
 
 
 @app.route("/studantpage")
 def studantpage():
-
     if "user_id" in session:
         return render_template("studantpage.html")
     
     return render_template("homepage.html")
 
+
 @app.route("/teacherpage", methods=["GET", "POST"])
 def teacherpage():
+    
     return render_template("teacherpage.html")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -90,12 +109,10 @@ def register():
 
         cursor.execute("INSERT INTO users (name, password, email, username, level, turn, serie) VALUES (%s, %s, %s, %s, %s, %s, %s)", (fullname, password, email, username, level, turn, serie))
         conection.commit()
-        #cursor.execute("SELECT id FROM users WHERE username = %s AND email = %s", (username, email))
-        #student_id = cursor.fetchone()
-        #cursor.execute("INSERT INTO grades (student_id) VALUES (%s)", (student_id))
         return redirect("/login")
 
     return render_template("register.html")
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -126,6 +143,51 @@ def login():
 
     return render_template("login.html")
 
+@app.route("/recover", methods=["GET", "POST"])
+def recover():
+
+    if request.method == "POST":
+        email = request.form.get("email")
+        cursor.execute("SELECT email FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+
+        if not user:
+            flash("Email não encontrado. Por favor, verifique seu email e tente novamente.")
+            return redirect("/recover")
+
+        token = s.dumps(email, salt="recover-salt")
+        link = url_for('reset_with_token', token=token, _external=True)
+
+        msg = Message("Recover password", recipients=[email])
+        msg.body = f"Click on this link to reset your password: {link}"
+
+        mail.send(msg)
+        flash ("email enviado com sucesso!")
+        return redirect("/recover")
+        
+    return render_template("recoverlogin.html")
+
+@app.route("/reset/<token>", methods=["GET", "POST"])
+def reset_with_token(token):
+    try:
+        email = s.loads(token, salt="recover-salt", max_age=3600)
+    except:
+        return redirect("/recover")
+
+    if request.method == "POST":
+        new_password = request.form.get("password")
+        confirm_password = request.form.get("confirm_password")
+
+        if not new_password or not confirm_password:
+            return redirect("/recover")
+
+        if new_password != confirm_password:
+            return redirect("/recover")
+
+        cursor.execute("UPDATE users SET password = %s WHERE email = %s", (new_password, email))
+        conection.commit()
+
+    return render_template("reset.html")
 
 @app.route("/reports", methods=["GET", "POST"])
 def reports(): 
@@ -192,7 +254,7 @@ def reports():
             tabela.drawOn(doc, 100, height - 150) 
             # Second table
             second_table.wrapOn(doc, width, height)
-            second_table.drawOn(doc, 50, height - 600)
+            second_table.drawOn(doc, 50, height - 300)
 
             doc.save()
 
@@ -207,12 +269,12 @@ def reports():
 
             return redirect("/studantpage")
 
-
     return render_template("reports.html")
+
 
 @app.route("/grid")
 def grid():
-    
+
     return render_template("grid.html")
 
 
@@ -232,9 +294,9 @@ def editgrades():
     cursor.execute("SELECT * FROM grades")
     grades = cursor.fetchall()
 
-    db.close()  # sempre bom fechar se for criar toda vez
-
+    db.close() 
     return render_template("editgrades.html", students=students, grades=grades)
+
 
 @app.route("/updategrades", methods=["POST"])
 def updategrades():
@@ -245,18 +307,14 @@ def updategrades():
         database="localdata"
     )
     cursor = db.cursor()
-
     form = request.form
 
-    # 1. Atualizar notas existentes
     for key in form:
         if key.startswith("grade_"):
             grade_id = key.split("_")[1]
             nova_nota = form[key]
-
             cursor.execute("UPDATE grades SET grade = %s WHERE id = %s", (nova_nota, grade_id))
 
-    # 2. Adicionar novas notas
     for key in form:
         if key.startswith("new_student_id"):
             student_ids = form.getlist(key)
@@ -277,3 +335,4 @@ def updategrades():
     db.close()
 
     return redirect("/editgrades")
+

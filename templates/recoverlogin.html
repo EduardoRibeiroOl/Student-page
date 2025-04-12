@@ -1,0 +1,27 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Recover Password
+{% endblock%}
+
+{% block main %}
+<div class="container">
+    <!-- Apenas o lado direito com formulário -->
+    <div class="right" style="flex: 1; width: 100%;">
+        <h2>Recover Password</h2>
+        <p>Enter your email to receive the password reset link</p>
+
+        <form method="post" action="/recover">
+            <div class="input-group">
+                <i class="fa fa-envelope"></i>
+                <input type="email" placeholder="Email address" name="email" required autofocus>
+            </div>
+            
+            <button type="submit">Send Recovery Email</button>
+        </form>
+        <p>Remembered your password? <a href="/login">Login here</a></p>
+    </div>
+</div>
+
+{% endblock %}

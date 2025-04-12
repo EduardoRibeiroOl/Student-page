@@ -1,42 +1,32 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Student Page
+    Student Login
 {% endblock %}
 
 {% block main %}
-
-    <div class="container">
-        <!-- Lado esquerdo - Ilustração -->
-        <div class="left">
-            <img src="/static/login.png" alt="Illustration">
-        </div>
-        
-        <!-- Lado direito - Formulário de Login -->
+<div class="container">
+    <div class="left">
+        <img src="/static/login.png" alt="Illustration">
+    </div>
         <div class="right">
             <h2>Student Login</h2>
             <p>Hey, enter your details to log in to your account</p>
 
-            <form  method = "post" action="/login"><!--{{ url_for('login') }}-->
+            <form  method = "post" action="/login">
                 <div class="input-group">
                     <i class="fa fa-user"></i>
-                    <input type="text" placeholder="Enter your username/email" name="username">
+                    <input type="text" placeholder="Enter your username/email" name="username" autofocus>
                 </div>
                 <div class="input-group">
                     <i class="fa fa-lock"></i>
                     <input type="password" placeholder="Enter your password" name="password">
                 </div>
-                <a href="#">Having trouble signing in?</a>
+                <a href="/recover">Having trouble signing in?</a>
                 <button type="submit">Login In</button>
             </form>
-            <!--<p>Or sign in with</p>-->
-            <div class="social-login">
-                <button class="google">Google</button>
-                <button class="facebook">Facebook</button>
-            </div>
-            <p>Don't have an account? <a href="#">Sign Up</a></p>
+            <p>Don't have an account? <a href="/register">Sign Up</a></p>
         </div>
     </div>
-
 
 {% endblock %}
